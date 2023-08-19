@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hms_cancel_appointment_form_view" model="ir.ui.view">
+        <field name="name">hms.cancel.appointment.wizard.form</field>
+        <field name="model">hms.cancel.appointment.wizard</field>
+        <field name="arch" type="xml">
+            <!-- <form create="0" delete="0" copy="0"> -->
+            <form string="hms_appointment_form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="appointment_id" invisible="context.get('hide_appointment')" help="Enter the appointment."/>
+                            <!-- <field name="appointment_id" help="Enter the appointment." domain="['|',('state','=','draft'),('state','=','create')]"/> -->
+                            <!-- <field name="appointment_id" help="Enter the appointment."/> -->
+                            <field name="reason" help="Enter the reason."/>
+                        </group>
+                        <group>
+                            <field name="cancel_date" help="Enter the cancel date."/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="cancel_appointment" data-hotkey="s" string="Cancel appointment" type="object" class="btn-success"/>
+                        <button special="cancel" data-hotkey="z" string="Discard" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hms_cancel_appointment_view" model="ir.actions.act_window">
+        <field name="name">Cancel Appointment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hms.cancel.appointment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem parent="hms_menu_appointment" name="Cancellation" id="hms_menu_cancel_appointment" groups="" action="action_hms_cancel_appointment_view" sequence="2"/>
+</odoo>

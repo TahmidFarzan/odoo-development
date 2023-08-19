@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hms_patiant,hms.patiant.access,model_hms_patient,base.group_user,1,1,1,1
+access_hms_doctor,hms.doctor.access,model_hms_doctor,base.group_user,1,1,1,1
+access_hms_tag,hms.tag.access,model_hms_tag,base.group_user,1,1,1,1
+access_hms_appointment,hms.appointment.access,model_hms_appointment,base.group_user,1,1,1,1
+access_hms_appointment_pharmacy_line,hms.appointment.pharmacy.line.access,model_hms_appointment_pharmacy_line,base.group_user,1,1,1,1
+access_hms_cancel_appointment_wizard,hms.cancel.appointment.wizard,model_hms_cancel_appointment_wizard,base.group_user,1,1,1,1
+access_hms_operation,hms.operation.access,model_hms_operation,base.group_user,1,1,1,1

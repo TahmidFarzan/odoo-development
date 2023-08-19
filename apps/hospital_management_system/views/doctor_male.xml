@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hms_male_doctor_search_view" model="ir.ui.view">
+        <field name="name">hms.male.doctor.search</field>
+        <field name="model">hms.doctor</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="age"/>
+                
+                <filter name="filter_archived" string="Archived" domain="[('active', '=', True)]"/>
+                <filter name="filter_unarchive" string="Unarchived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hms_male_doctor_view" model="ir.actions.act_window">
+        <field name="name">Male doctor</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hms.doctor</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_gender' : 'male'}</field>
+        <field name="domain">[('gender', '=', 'male')]</field>
+        <field name="search_view_id" ref="hospital_management_system.hms_male_doctor_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create first male doctor.</p>
+        </field>
+    </record>
+
+    <menuitem parent="hms_menu_doctor" name="Male" id="hms_menu_male_doctor" groups="" action="action_hms_male_doctor_view" sequence="2"/>
+</odoo>

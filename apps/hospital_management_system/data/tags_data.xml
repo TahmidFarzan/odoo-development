@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+    
+        <record id="hms_tag_tag_1" model="hms.tag" forcecreate="0">
+            <field name="name">Tag 1</field>
+        </record>
+
+        <record id="hms_tag_tag_2" model="hms.tag" forcecreate="0">
+            <field name="name">Tag 2</field>
+        </record>
+
+        <record id="hms_tag_tag_3" model="hms.tag" forcecreate="0">
+            <field name="name">Tag 3</field>
+        </record>
+
+        <record id="hms_tag_tag_4" model="hms.tag" forcecreate="0">
+            <field name="name">Tag 4</field>
+            <field name="active" eval="False"/>
+        </record>
+    
+    </data>
+    
+    
+</odoo>

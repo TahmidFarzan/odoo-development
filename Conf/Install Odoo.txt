@@ -1,0 +1,17 @@
+*** Process ***
+ 1) Download script from the link "https://raw.githubusercontent.com/Yenthe666/InstallScript/15.0/odoo_install.sh".
+ 2) Make Script executable.
+ 3) Execute the script.
+*** *** ***
+
+*** Odoo Install ***
+https://github.com/Yenthe666/InstallScript
+
+ *** Download script*** 
+ sudo wget https://raw.githubusercontent.com/Yenthe666/InstallScript/15.0/odoo_install.sh
+
+ *** Make the script executable *** 
+  sudo chmod +x odoo_install.sh
+ *** Execute the script *** 
+  sudo ./odoo_install.sh
+*** *** ***

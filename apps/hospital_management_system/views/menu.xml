@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem name="Hospital" web_icon="hospital_management_system,static/description/hms.png" id="hms_menu_root" groups="" action="" sequence="10"/>
+    <menuitem parent="hms_menu_root" name="Doctor" id="hms_menu_doctor" groups="" action="" sequence="1"/>
+    <menuitem parent="hms_menu_root" name="Appointment" id="hms_menu_appointment" groups="" action="" sequence="2"/>
+    <menuitem parent="hms_menu_root" name="Operation" id="hms_menu_operation" groups="" action="" sequence="3"/>
+    <menuitem parent="hms_menu_root" name="Configuration" id="hms_menu_configuration" groups="" action="" sequence="4"/>
+</odoo>

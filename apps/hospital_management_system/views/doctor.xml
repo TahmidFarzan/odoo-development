@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hms_doctor_form_view" model="ir.ui.view">
+        <field name="name">hms.doctor.form</field>
+        <field name="model">hms.doctor</field>
+        <field name="arch" type="xml">
+            <form string="hms_doctor_form">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible' : [('active','=',True)]}"/>
+                    <group>
+                        <group >
+                            <field name="name"/>
+                            <field name="gender"/>
+                        </group>
+                        
+                        <group >
+                            <field name="capitalize_name"/>
+                            <field name="age"/>
+                        </group>
+                        
+                        <group >
+                            <field name="note"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    
+                    </group>
+
+                    
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <record id="hms_doctor_tree_view" model="ir.ui.view">
+        <field name="name">hms.doctor.tree</field>
+        <field name="model">hms.doctor</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="gender"/>
+                <field name="age"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hms_doctor_search_view" model="ir.ui.view">
+        <field name="name">hms.doctor.search</field>
+        <field name="model">hms.doctor</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- <field name="name" filter_domain="['|', ('name', 'ilike', self),('reference', 'ilike', self)]"/> -->
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="gender"/>
+                <field name="age"/>
+                <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]"/>
+                <filter name="filter_female" string="Female" domain="[('gender', '=', 'female')]"/>
+                <filter name="filter_other" string="Other" domain="[('gender', '=', 'other')]"/>
+                <separator/>
+                <filter name="filter_archived" string="Archived" domain="[('active', '=', True)]"/>
+                <filter name="filter_unarchive" string="Unarchived" domain="[('active', '=', False)]"/>
+                
+                <group expand="0" string="Group By...">
+                    <filter name="group_by_gender" string="Gender" context="{'group_by': 'gender'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hms_doctor_view" model="ir.actions.act_window">
+        <field name="name">Doctor</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hms.doctor</field>
+        <field name="view_mode">tree,form</field>
+        <!-- <field name="context">{'default_gender': 'male'}</field> -->
+        <!-- <field name="domain">[{'gender','=','male'}]</field> -->
+        <field name="search_view_id" ref="hospital_management_system.hms_doctor_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create first doctor.</p>
+        </field>
+    </record>
+
+    <menuitem parent="hms_menu_doctor" name="All" id="hms_menu_all_doctor" groups="" action="action_hms_doctor_view" sequence="1"/>
+</odoo>

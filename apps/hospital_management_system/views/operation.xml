@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hms_operation_form_view" model="ir.ui.view">
+        <field name="name">hms.operation.form</field>
+        <field name="model">hms.operation</field>
+        <field name="arch" type="xml">
+            <form string="hms_operation_form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" help="Enter the name." default_focus="1"/>
+                        </group>
+
+                        <group>
+                            <field name="doctor_id" options="{'no_open':True,'no_create':True}" help="Must be a doctor."/>
+                        </group>
+                        
+                        <group>
+                            <field name="reference_record"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <record id="hms_operation_tree_view" model="ir.ui.view">
+        <field name="name">hms.operation.tree</field>
+        <field name="model">hms.operation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="doctor_id"/>
+                <field name="reference_record"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hms_operation_search_view" model="ir.ui.view">
+        <field name="name">hms.operation.search</field>
+        <field name="model">hms.operation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+
+                <searchpanel>
+                    <field name="doctor_id" string="Doctor" icon="fa-users" enable_counter="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hms_operation_view" model="ir.actions.act_window">
+        <field name="name">Operation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hms.operation</field>
+        <field name="view_mode">tree,form,activity</field>
+        <field name="search_view_id" ref="hospital_management_system.hms_operation_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create first operation.</p>
+        </field>
+    </record>
+
+    <menuitem parent="hms_menu_operation" name="Operation" id="hms_menu_operation_list" groups="" action="action_hms_operation_view" sequence="1"/>
+</odoo>

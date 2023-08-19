@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_mark_as_done" model="ir.actions.server">
+        <field name="name">Done</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_hms_appointment"/>
+        <field name="binding_model_id" ref="model_hms_appointment"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            for row in records:
+                row.done_appointment()
+        </field>
+    </record>
+
+    <record id="hms_appointment_form_view" model="ir.ui.view">
+        <field name="name">hms.appointment.form</field>
+        <field name="model">hms.appointment</field>
+        <field name="arch" type="xml">
+            <!-- <form create="0" delete="0" copy="0"> -->
+            <form string="hms_appointment_form">
+                <sheet>
+                    <header>
+                        <!-- <field name="status" widget="statusbar" statusbar_visible="draft,created,ongoing,done" nolabel="1" options="{'clickable':'1'}"/> -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,created,ongoing,done" nolabel="1"/>
+                        
+                        <!-- <button name="create_appointment" string="Create" type="object" class="oe_highlight" attrs="{'invisible' : ['|','|',('status','=','cancel'),('status','=','done'),('status','=','create')]}" help="Status will be create."/> -->
+                        <!-- <button name="ongoing_appointment" string="Ongoing" type="object" class="oe_highlight" attrs="{'invisible' : ['|','|',('status','=','cancel'),('status','=','done'),('status','=','ongoing')]}" help="Status will be ongoing."/> -->
+                        <!-- <button name="done_appointment" string="Done" type="object" class="oe_highlight" attrs="{'invisible' : ['|',('status','=','cancel'),('status','=','done')]}" confirm="Are your sure to done it?" help="Status will be done."/> -->
+                        <!-- <button name="cancel_appointment" string="Cancel" type="object" class="oe_highlight" attrs="{'invisible' : ['|',('status','=','cancel'),('status','=','done')]}" confirm="Are your sure to cancel it?" help="Status will be cancel."/> -->
+                        <button name="create_share_whatsapp" string="Share in whatsapp" type="object" states="draft,create" class="oe_highlight" help="Share on whatsapp." icon="fa-whatsapp" data-hotkey="w"/>
+                        <button name="action_send_mail" string="Send mail" type="object" states="draft,create" class="oe_highlight" icon="fa-send" data-hotkey="m"/>
+                        <button name="create_appointment" string="Create" type="object" states="draft" help="Status will be create." data-hotkey="d"/>
+                        <button name="ongoing_appointment" string="Ongoing" type="object" states="create" data-hotkey="c"/>
+                        <button name="done_appointment" string="Done" type="object" states="ongoing" confirm="Are your sure to done it?" help="Status will be done." data-hotkey="o"/>
+                        <!-- <button name="cancel_appointment" string="Cancel" type="object" states="draft,create" confirm="Are your sure to cancel it?" help="Status will be cancel." data-hotkey="r"/> -->
+                        <button name="%(hospital_management_system.action_hms_cancel_appointment_view)d" context="{'default_appointment_id' : active_id,'hide_appointment':1}" string="Cancel" type="action" states="draft,create" confirm="Are your sure to cancel it?" help="Status will be cancel." data-hotkey="r"/>
+                    </header>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="name" help="Enter the name." default_focus="1"/>
+                            <field name="booking_date" help="Must be booking date."/>
+                        </group>
+
+                        <group>
+                            <field name="capitalize_name" help="Auto generated capitalize name."/>
+                            <field name="appointment_time" help="Must be appointment time."/>
+                        </group>
+
+                        <group>
+                            <field name="duration"/>
+                        </group>
+
+                        <group>
+                            <field name="patient_id" help="Must be a patient."/>
+                            <!-- <field name="patient_id" widget="selection" help="Must be a patient."/> -->
+                        </group>
+
+                        <group>
+                            <field name="doctor_id" options="{'no_open':True,'no_create':True}" help="Must be a doctor."/>
+                            <field name="priority" widget="priority" help="Must be a priority." />
+                        </group>
+
+                        <group>
+                            <field name="operation_id" help="Must be a doctor."/>
+                        </group>
+
+                        <group>
+                            <field name="currency_id" invisible="1"/> 
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field' : 'color'}"/>
+                            <!-- <field name="tag_ids" widget="many2many_checkboxes" options="{'color_field' : 'color'}"/> -->
+                            <!-- <field name="tag_ids"/> -->
+                        </group>
+
+                        <group>
+                            <button name="redirect_action" string="Redirect to Developer" type="object" class="oe_highlight"/>
+                            <button name="action_notification" string="Notification" type="object" class="oe_highlight"/>
+                            <button name="action_page_notification" string="Page Notification" type="object" class="oe_highlight"/>
+                        </group>
+
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/> 
+                            <field name="currency_id" groups="base.group_multi_currency" invisible="1"/> 
+
+                            <!-- <field name="company_id"/> 
+                            <field name="currency_id" invisible="1"/> -->
+                        </group>
+
+                        <group>
+                            <field name="hide_sale_price" help="Must be a yes or no." groups="base.group_no_one"/>
+                        </group>
+
+                        <group>
+                            <field name="total_price" help="Must be a totel price." readonly="1"/>
+                        </group>
+
+                        <group>
+                            <field name="note" help="Must be a note."/>
+                        </group>
+
+                    </group>
+
+                    <notebook>
+                        <page name="progress" string="Progress">
+                            <!-- <field name="progress" widget="progressbar" options="{'current_value': '25','max_value': '100','editable':false}"/> -->
+                            <!-- <field name="progress" widget="percentpie" options="{'editable':false}"/> -->
+                            
+                            <field name="progress" widget="gauge" options="{'style':'width:120px;height:120px;','editable':false}"/>
+                        </page>
+                        <page name="hms_appointment_prescription" string="Prescription">
+                            <field name="prescription" placeholder="Enter the prescription." help="Must be a prescription." options="{'collaborative': true, 'resizable': true,'codeview':true}"/>
+                        </page>
+
+                        <page name="hms_appointment_pharmacy" string="Pharmacy">
+                            <field name="pharmacy_line_ids">
+                                <tree editable="bottom">
+                                    <field name="sl_no"/>        
+                                    <field name="product_id"/>  
+                                    <field name="qty"/>    
+                                    <field name="price_unit" widget="monetary" readonly="1" attrs="{'column_invisible' : [('parent.hide_sale_price','=',True)]}" options="{'currency_field' : 'currency_id','field_digits' : True}"/>
+                                    <field name="currency_id" invisible="1"/>  
+                                    <field name="price" sum="Total price"/>      
+                                    <field name="monetary_price" sum="Total monetary price"/>
+                                    <field name="note"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="sl_no" readonly="1"/> 
+                                        <field name="product_id" help="Must be a product."/>  
+                                        <field name="qty" help="Must be a quentity."/>    
+                                        <field name="price_unit" help="Must be a price." readonly="1" attrs="{'column_invisible' : [('parent.hide_sale_price','=',True)]}"/>   
+                                        <field name="price" readonly="1"/>        
+                                        <field name="note" help="Must be a note."/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <record id="hms_appointment_tree_view" model="ir.ui.view">
+        <field name="name">hms.appointment.tree</field>
+        <field name="model">hms.appointment</field>
+        <field name="arch" type="xml">
+            <!-- <tree create="0" delete="0"> -->
+            <tree decoration-success="state == 'done'" decoration-primary="state == 'ongoing'" decoration-danger="state == 'cancel'" sample="1" multi_edit="1">
+                <!-- <header>
+                    <button name="create_appointment" string="Create" type="object" help="Status will be create."/>
+                </header> -->
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="doctor_id"/>
+                <!-- <field name="doctor_id" widget="many2one_avatar"/> -->
+                <!-- <field name="doctor_id" widget="many2one_avatar_user"/> -->
+                <field name="patient_id"/>
+                <field name="booking_date"/>
+                <field name="appointment_time"/>
+                <field name="duration"/>
+                <field name="priority" widget="priority"/>
+                <field name="total_price" sum="Total price" decoration-bf="1" decoration-it="1"/>
+                <field name="state" decoration-success="state == 'done'" decoration-info="state in ('draft','create')" decoration-primary="state == 'ongoing'" decoration-danger="state == 'cancel'"  widget="badge"/>
+                <field name="activity_ids" widget="list_activity"/>
+                <field name="note" optional="hide"/>
+
+                <field name="progress" widget="progressbar"/>  
+
+                <button name="create_appointment" string="Create" type="object" attrs="{'invisible' : [('state','!=','draft')]}"/>
+                <button name="ongoing_appointment" string="Ongoing" type="object" attrs="{'invisible' : [('state','!=','create')]}"/>
+                <button name="done_appointment" class="fa fa-check btn-success" string="Done" type="object" attrs="{'invisible' : [('state','!=','ongoing')]}" confirm="Are your sure to done it?" />
+                <button name="%(hospital_management_system.action_hms_cancel_appointment_view)d" context="{'default_appointment_id' : active_id,'hide_appointment':1}" string="Cancel" type="action" attrs="{'invisible' : [('state','not in',('create','draft') ) ] }" confirm="Are your sure to cancel it?" />
+
+                <groupby name="patient_id">
+                    <button name="edit" string="Edit" type="edit" class="oe_highlight"/>
+                    <button name="test_action" string="Click me" type="object" class="oe_highlight"/>
+                </groupby>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hms_appointment_calender_view" model="ir.ui.view">
+        <field name="name">hms.appointment.calender</field>
+        <field name="model">hms.appointment</field>
+        <field name="arch" type="xml">
+            <calendar string="Appointment" date_start="booking_date" date_delay="duration" mode="month" color="state" quick_add="True" hide_time="True"
+            form_view_id="%(hospital_management_system.hms_appointment_form_view)d" event_open_popup="True" event_limit="5">
+                <field name="name"/>
+                <field name="doctor_id" filters="1"/>
+                <field name="patient_id" avatar_field="image"/>   
+                <field name="state" invisible="1" filters="1"/>         
+            </calendar>
+        </field>
+    </record>
+
+    <record id="hms_appointment_tree_activity" model="ir.ui.view">
+        <field name="name">hms.appointment.activity</field>
+        <field name="model">hms.appointment</field>
+        <field name="arch" type="xml">
+            <activity string="Appointment" >
+                <field name="patient_id"/>
+                <field name="reference"/>
+                <templates>
+                    <div t-name="activity-box">
+                        <img t-att-src="activity_image('hms.patient','image',record.patient_id.raw_value)" t-att-title="record.patient_id.value" t-alt-title="record.patient_id.value"/>
+                        <div>
+                            <field name="reference"/>
+                        </div>
+                    </div>
+                </templates>
+            </activity>
+        </field>
+    </record>
+
+    <record id="hms_appointment_search_view" model="ir.ui.view">
+        <field name="name">hms.appointment.search</field>
+        <field name="model">hms.appointment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reference"/>
+                <field name="name"/>
+
+                <filter name="group_by_priority_normal" string="Normal" context="{'priority': '0'}" />
+                <filter name="group_by_priority_low" string="Low" context="{'priority': '1'}" />
+                <filter name="group_by_priority_high" string="High" context="{'priority': '2'}" />
+                <filter name="group_by_priority_very_high" string="Very High" context="{'priority': '3'}" />
+                <separator/>
+                <filter name="group_by_status_draft" string="Draft" context="{'state': 'draft'}" />
+                <filter name="group_by_status_created" string="Created" context="{'state': 'created'}" />
+                <filter name="group_by_status_ongoing" string="Ongoing" context="{'state': 'ongoing'}" />
+                <filter name="group_by_status_done" string="Done" context="{'state': 'done'}" />
+                <filter name="group_by_status_canceled" string="Canceled" context="{'state': 'canceled'}" />
+
+                <group expand="0" string="Group By...">
+                    <filter name="group_by_appointment_time" string="Appointment time" context="{'group_by': 'appointment_time'}" />
+                    <filter name="group_by_booking_date" string="Booking date" context="{'group_by': 'booking_date'}" />
+                    <separator/>
+                    <filter name="group_by_priority" string="Priority" context="{'group_by': 'priority'}" />
+                    <separator/>
+                    <filter name="group_by_status" string="Status" context="{'group_by': 'state'}" />
+                    <separator/>
+                    <filter name="group_by_tag" string="Tag" context="{'group_by': 'tag_ids'}" />
+                </group>
+                
+                <searchpanel>
+                    <field name="doctor_id" string="Doctor" icon="fa-users" enable_counter="1"/>
+                    <field name="tag_ids" string="Tag" select="multi" icon="fa-tags" enable_counter="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hms_appointment_view" model="ir.actions.act_window">
+        <field name="name">Appointment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hms.appointment</field>
+        <field name="view_mode">tree,form,activity,calendar</field>
+        <field name="search_view_id" ref="hospital_management_system.hms_appointment_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create first appointment.</p>
+        </field>
+    </record>
+
+    <menuitem parent="hms_menu_appointment" name="Appointment" id="hms_menu_appointment_list" groups="" action="action_hms_appointment_view" sequence="1"/>
+</odoo>
